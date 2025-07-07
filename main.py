@@ -6,7 +6,7 @@ pygame.init()
 WIDTH = 900
 HEIGHT = 700
 
-WIN = pygame.dispay.set_mode([WIDTH,HEIGHT])
+WIN = pygame.display.set_mode([WIDTH,HEIGHT])
 
 pygame.display.set_caption('Recycle Marathon')
 
@@ -90,20 +90,54 @@ while playing:
             text1 = myFont.render("Bin loot successful", True,RED)
         else:
             WIN.fill(RED)
-            text1 = myFont.render("Better luck nex time",True, "GREEN")
+            text1 = myFont.render("Better luck next time",True, "GREEN")
         WIN.blit(text1,(250,40))
     else:
         change_background('bground.png')
         countDown = myFont.render("Time Left:" + str(60 - int(timeElapsed)), True,WHITE)
         WIN.blit(countDown, (20,10))
-        
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            if bin.rect.y >0:
+                bin.rect.y -= 5
+        if keys[pygame.K_DOWN]:
+            if bin.rect.y <630:
+                bin.rect.y += 5
+        if keys[pygame.K_RIGHT]:
+            if bin.rect.x < 850:
+                bin.rect.x += 5
+        if keys[pygame.K_LEFT]:
+            if bin.rect.x > 0:
+                bin.rect.x -= 5
+        #when the bin hits the recyclable
+        item_hit_list = pygame.sprite.spritecollide(bin,item_list,True)
+
+        for item in item_hit_list:
+            score += 1
+            text = myFont.render("Score=" + str(score), True, WHITE)
+        #when the bin hits the nonrecyclable
+        plastic_hit_list = pygame.sprite.spritecollide(bin,plastic_list,True)
+
+        for plastic in plastic_hit_list:
+            score -= 5
+            text = myFont.render("Score=" + str(score),True,WHITE)
+
+    WIN.blit(text,(20,50))
+    allsprites.draw(WIN)
+    pygame.display.update()
+
+pygame.quit()
+                
+
+
+
+
 
 
         
 
+
         
 
-
-
-
-
+        
